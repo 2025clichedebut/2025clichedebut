@@ -110,17 +110,20 @@ async function loadSponsors() {
 
         for (let groupIndex = 0; groupIndex < groupCount; groupIndex++) {
             const section = document.createElement('div');
-            section.className = 'sponsor-section';
+            section.className = 'sponsor-section '+ groupIndex;
 
             const imageDiv = document.createElement('div');
             imageDiv.className = 'sponsor-image';
             const img = document.createElement('img');
 
-            img.src = `images/photo${groupIndex.toString().padStart(2, '0')}.jpg`;
-            img.alt = `사진 ${groupIndex + 1}`;
-            img.className = 'cover-image';
-            imageDiv.appendChild(img);
-            section.appendChild(imageDiv);
+            // 마지막 그룹은 사진 넣지 않음
+            if (groupIndex + 1 < groupCount) {
+                img.src = `images/photo${groupIndex.toString().padStart(2, '0')}.jpg`;
+                img.alt = `사진 ${groupIndex}`;
+                img.className = 'cover-image';
+                imageDiv.appendChild(img);
+                section.appendChild(imageDiv);
+            }
 
             // 첫 번째 그룹에만 검색 바 추가
             if (groupIndex === 0) {
