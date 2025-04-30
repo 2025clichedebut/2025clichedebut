@@ -102,21 +102,28 @@ async function loadSponsors() {
         const data = await response.json();
         const container = document.getElementById('sponsorContainer');
 
-        data.groups.forEach((group, index) => {
+        // 그룹당 표시할 후원자 수
+        const sponsorsPerGroup = 60;
+
+        const allSponsors = data.sponsors || [];
+        const groupCount = Math.ceil(allSponsors.length / sponsorsPerGroup);
+
+        for (let groupIndex = 0; groupIndex < groupCount; groupIndex++) {
             const section = document.createElement('div');
             section.className = 'sponsor-section';
 
             const imageDiv = document.createElement('div');
             imageDiv.className = 'sponsor-image';
             const img = document.createElement('img');
-            img.src = group.image;  // 나머지 그룹은 단일 이미지
-            img.alt = `사진 ${index + 1}`;
+
+            img.src = `images/photo${groupIndex.toString().padStart(2, '0')}.jpg`;
+            img.alt = `사진 ${groupIndex + 1}`;
             img.className = 'cover-image';
             imageDiv.appendChild(img);
             section.appendChild(imageDiv);
 
             // 첫 번째 그룹에만 검색 바 추가
-            if (index === 0) {
+            if (groupIndex === 0) {
                 const searchContainer = document.createElement('div');
                 searchContainer.className = 'search-container';
                 searchContainer.innerHTML = `
@@ -129,19 +136,23 @@ async function loadSponsors() {
             const table = document.createElement('table');
             table.className = 'sponsor-table';
 
-            for (let i = 0; i < group.sponsors.length; i += 3) {
+            const startIndex = groupIndex * sponsorsPerGroup;
+            const endIndex = startIndex + sponsorsPerGroup;
+            const groupSponsors = allSponsors.slice(startIndex, endIndex);
+
+            for (let i = 0; i < groupSponsors.length; i += 3) {
                 const row = table.insertRow();
                 for (let j = 0; j < 3; j++) {
-                    if (i + j < group.sponsors.length) {
+                    if (i + j < groupSponsors.length) {
                         const cell = row.insertCell();
-                        cell.textContent = group.sponsors[i + j];
+                        cell.textContent = groupSponsors[i + j];
                     }
                 }
             }
 
             section.appendChild(table);
             container.appendChild(section);
-        });
+        }
 
         wrapNicknamesInSpan();
         setupIntersectionObserver();
