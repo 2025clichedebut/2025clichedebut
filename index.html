@@ -21,5 +21,22 @@
 </div>
 <button id="topButton" title="Go to top">TOP</button>
 <script src="main.js"></script>
+<script>
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            e.preventDefault();
+        }
+        if (e.keyCode === 123) {
+            e.preventDefault();
+        }
+    });
+</script>
 </body>
 </html>
